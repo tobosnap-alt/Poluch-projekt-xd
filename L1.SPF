@@ -1,0 +1,51 @@
+; ================================================================
+; PODPROGRAM: L1.SPF
+; Operacia:   HRUBOVANIE
+; Nastroj:    T1 - hruba platnicka CNMG 120408
+; Popis:      Odsustruzenie suroviny na prisdavok 0.5mm
+;             Casek fi30 (dlzka 30mm) + casek fi45 (dlzka 50mm)
+; ================================================================
+
+; --- VYSVETLIVKY ZAKLADNYCH VIET ---
+; G0 X.. Z..  = RYCHLOPOSUV (presun bez rezu, maximalna rychlost)
+; G1 X.. Z..  = PRACOVNY POSUV (rezanie, rychlost podla F)
+; X..         = suradnica priemeru (napr. X46 = priemer 46mm)
+; Z..         = suradnica po osi Z (Z0=celo, Z-30=30mm od cela)
+
+; ----------------------------------------------------------------
+; PRECHOD 1 - hrubie na fi45+prisdavok = fi46
+; ----------------------------------------------------------------
+
+G0 X55 Z5      ; rychloposuv: odsun od kusu (bezpecna poloha)
+G0 X46 Z2      ; rychloposuv: priblizenie na priemer fi46, pred celo
+
+G1 Z-80        ; PRACOVNY POSUV: sustruzenie po Z az na Z=-80mm
+               ;   -> odsustruzuje casek fi45 (s prisdavkom)
+
+G0 X55         ; rychloposuv: odsun od kusu (v smere X)
+G0 Z2          ; rychloposuv: navrat pred celo
+
+; ----------------------------------------------------------------
+; PRECHOD 2 - hrubie na fi30+prisdavok = fi31
+; ----------------------------------------------------------------
+
+G0 X31 Z2      ; rychloposuv: priblizenie na priemer fi31
+
+G1 Z-30        ; PRACOVNY POSUV: sustruzenie po Z az na Z=-30mm
+               ;   -> odsustruzuje casek fi30 (s prisdavkom)
+
+G0 X55         ; rychloposuv: odsun od kusu
+G0 Z2          ; rychloposuv: navrat pred celo
+
+; ----------------------------------------------------------------
+; PRECHOD 3 - druhy hruby prechod fi30 (hlbsi)
+; ----------------------------------------------------------------
+
+G0 X34 Z2      ; rychloposuv: priblizenie na fi34
+
+G1 Z-30        ; PRACOVNY POSUV: sustruzenie casek fi30
+
+G0 X55         ; rychloposuv: odsun
+G0 Z100        ; rychloposuv: navrat do bezpecnej polohy (pre vymenu)
+
+M17            ; KONIEC PODPROGRAMU - navrat do hlavneho programu

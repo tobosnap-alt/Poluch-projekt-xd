@@ -1,0 +1,52 @@
+; ================================================================
+; PODPROGRAM: L2.SPF
+; Operacia:   DOCISTOVANIE (dokoncovanie kontury)
+; Nastroj:    T2 - docistovacia platnicka VBMT 110304
+; Popis:      Presne dosustruzenie na finalny rozmer
+;             fi30 na dlzku 30mm + fi45 na dlzku 50mm
+; ================================================================
+
+; --- VYSVETLIVKY ---
+; Po hrubovacom prechode zostal prisdavok 0.5mm
+; Teraz sustruzime na PRESNY rozmer: fi30 a fi45
+; Posuv je mensi (F0.12) = hladsi povrch
+
+; ----------------------------------------------------------------
+; PRECHOD 1 - docistenie casek fi45 (od Z=-30 do Z=-80)
+; ----------------------------------------------------------------
+
+G0 X55 Z5      ; rychloposuv: odsun do bezpecnej polohy
+
+G0 X45 Z2      ; rychloposuv: priblizenie na PRESNY priemer fi45
+               ;   (nie fi46 ako pri hrubovacom - teraz presny rozmer)
+
+G1 Z-80        ; PRACOVNY POSUV: docistovanie casek fi45
+               ;   od Z=2 az po Z=-80 = dlzka 80mm (vrch casek)
+
+G0 X55         ; rychloposuv: odsun od kusu
+
+; ----------------------------------------------------------------
+; PRECHOD 2 - docistenie casek fi30 (od Z=0 do Z=-30)
+; ----------------------------------------------------------------
+
+G0 X30 Z2      ; rychloposuv: priblizenie na PRESNY priemer fi30
+
+G1 Z-30        ; PRACOVNY POSUV: docistovanie casek fi30
+               ;   od Z=2 az po Z=-30 = dlzka 30mm
+
+G0 X55         ; rychloposuv: odsun od kusu
+
+; ----------------------------------------------------------------
+; PRECHOD 3 - docistenie SCHODU (prechod fi30 -> fi45 na Z=-30)
+; ----------------------------------------------------------------
+
+G0 X28 Z-28    ; rychloposuv: pozicia pred schod (X mensi ako fi30)
+
+G1 X45 Z-30    ; PRACOVNY POSUV: docistenie schodu
+               ;   pohyb v osi X aj Z naraz = sikmy schod
+
+G0 X55         ; rychloposuv: odsun
+
+G0 Z100        ; rychloposuv: navrat (priprava na dalsiu operaciu)
+
+M17            ; KONIEC PODPROGRAMU

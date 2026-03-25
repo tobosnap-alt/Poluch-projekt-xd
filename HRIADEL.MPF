@@ -1,0 +1,62 @@
+; ================================================================
+; HLAVNY PROGRAM: HRIADEL.MPF
+; Riadenie:       WinNC Sinumerik 840D - Sustruh
+; Kus:            Stupnovity hriadel
+; Polotovar:      Tyc fi50 x 120 mm, ocel C45
+; Nulovy bod:     Celo kusu (Z=0), stred osi (X=0)
+;
+; KRESBA:
+;          Z-80      Z-30    Z0
+;           |         |      |
+;   fi50----+--fi45---+--fi30-+  <--- CELO
+;           |         |      |
+;       (50mm dlzka)(30mm)(celo)
+;
+; POSTUP:
+;   L1.SPF - Hrubovanie
+;   L2.SPF - Docistovanie
+;   L3.SPF - Zazraznenie hran
+;   L4.SPF - Zapich (zazrieb)
+; ================================================================
+
+; --- ZAKLADNE NASTAVENIA ---
+G71        ; metricky system [mm]
+G90        ; absolutne suradnice (od nuloveho bodu)
+G95        ; posuv F v [mm/ot]
+G40        ; zrusenie korekcie polomeru nastroja
+
+; --- NASTROJ 1: Hrubovacie sustruzenie ---
+T1 D1      ; nastroj T1, korekcia D1 (hruba platnicka CNMG 120408)
+M6         ; vymena nastroja
+S600 M3    ; 600 ot/min, vreteno vpravo (M3)
+F0.3       ; posuv 0.3 mm/ot
+M8         ; zapnutie chladenia
+
+L1         ; VOLANIE PODPROGRAMU 1 - Hrubovanie
+
+; --- NASTROJ 2: Docistovacie sustruzenie ---
+T2 D1      ; nastroj T2, korekcia D1 (docistovacia VBMT 110304)
+M6
+S1200 M3   ; 1200 ot/min
+F0.12      ; posuv 0.12 mm/ot
+M8
+
+L2         ; VOLANIE PODPROGRAMU 2 - Docistovanie
+
+; --- NASTROJ 2: Zazraznenie (rovnaky nastroj) ---
+L3         ; VOLANIE PODPROGRAMU 3 - Zazraznenie hran
+
+; --- NASTROJ 3: Zapichovaci noz ---
+T3 D1      ; nastroj T3 (zapichovaci noz, sirka 3mm)
+M6
+S500 M3    ; 500 ot/min
+F0.05      ; posuv 0.05 mm/ot (jemny)
+M8
+
+L4         ; VOLANIE PODPROGRAMU 4 - Zapich
+
+; --- KONIEC PROGRAMU ---
+G0 X120 Z50  ; odsun do bezpecnej polohy
+M9           ; vypnutie chladenia
+M5           ; zastavenie vretena
+M30          ; KONIEC HLAVNEHO PROGRAMU

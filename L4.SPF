@@ -1,0 +1,47 @@
+; ================================================================
+; PODPROGRAM: L4.SPF
+; Operacia:   ZAPICH (zazrieb pre poistny prstenec)
+; Nastroj:    T3 - zapichovaci noz, sirka brita 3mm
+; Popis:      Zapich na prechode fi30->fi45 pri Z=-30
+;             Rozmer: fi26 x 3mm sirky
+;
+; KRESBA ZAPICHU (rez):
+;
+;   fi30 ----+      +---- fi45
+;            |      |
+;   fi26 ----+------+    <- dno zapichu
+;            |<-3mm>|   <- sirka = sirka nastroja
+;          Z=-33  Z=-30
+; ================================================================
+
+; --- VYSVETLIVKY ---
+; Zapich = driek zapichnuty kolmo na os (v smere X)
+; Noz ma sirku 3mm -> jeden priamy pohyb = zapich hotovy
+; Pozicia nastroja: stred nastroja na Z=-31.5 (stred zapichu)
+; G4 F.. = PRODLEVA (zastavi posuv na urceny cas pre vycistenie)
+
+; ----------------------------------------------------------------
+; ZAPICH pri Z=-30 (prechod fi30 -> fi45)
+; ----------------------------------------------------------------
+
+G0 X55 Z5        ; rychloposuv: bezpecna poloha
+
+G0 X50 Z-31      ; rychloposuv: polozenie nastroja NAD zapich
+                 ;   X=50 (mimo materialu), Z=-31 (stred zapichu)
+                 ;   stred nastroja sirky 3mm: Z=-31 pokryva Z=-30 az Z=-33
+
+G1 X26           ; PRACOVNY POSUV: zapichnutie na fi26
+                 ;   pohyb len v osi X (kolmo na os sustruhu)
+                 ;   X26 = priemer dna zapichu
+
+G4 F1.5          ; PRODLEVA 1.5 sekundy
+                 ;   noz zotrvava v dne zapichu = vycisti dno
+                 ;   (kus sa otoci 1.5s bez posuvu)
+
+G1 X50           ; PRACOVNY POSUV: vytiahnutie noza von z zapichu
+                 ;   pohyb spat v osi X
+
+G0 X55           ; rychloposuv: odsun od kusu (bezpecne)
+G0 Z100          ; rychloposuv: navrat do bezpecnej polohy
+
+M17              ; KONIEC PODPROGRAMU
