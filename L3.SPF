@@ -1,53 +1,29 @@
 ; ================================================================
-; PODPROGRAM: L3.SPF
-; Operacia:   ZAZRAZNENIE HRAN (Chamfer 1x45°)
-; Nastroj:    T2 - docistovacia platnicka VBMT 110304
-; Popis:      Zazraznenie 1x45° na vsetkych ostrych hranach
+; PODPROGRAM L3 : ZAZRAZNENIE HRAN  (Chamfer 1x45°)
+; Nastroj       : T2 VBMT 110304  (rovnaky ako L2)
+; Uloha         : Skosenie 1x45° na troch hranach kusu
 ;
-; HRANY:
-;   [A] X=30, Z=0    - celo casek fi30
-;   [B] X=45, Z=-30  - prechod schodu (fi30 -> fi45)
-;   [C] X=50, Z=-80  - koniec casek fi45
+; Zazraznenie funguje tak ze nastroj pohybuje sucasne v X aj Z
+; o rovnaku hodnotu -> vznikne uhol 45 stupnov
+;
+; Hrany:
+;   [A]  X30  Z0    - celo casek fi30
+;   [B]  X45  Z-30  - schod prechodu fi30 -> fi45
+;   [C]  X50  Z-80  - koniec casek fi45
 ; ================================================================
 
-; --- VYSVETLIVKY ---
-; Zazraznenie 1x45° = ujdeme o 1mm v Z + 1mm v X sucasne
-; Napr: zacneme na X28 Z0, ideme na X30 Z-1
-;       -> vznikne skosenie 1mm pod uhlom 45°
+G0 X55 Z5          ; odsun do bezpecnej polohy
+G0 X28 Z1          ; rychloposuv pred hranu [A]  (X < fi30, Z pred celom)
 
-; ----------------------------------------------------------------
-; HRANA [A] - Zazraznenie na cele casek fi30 (Z=0)
-; ----------------------------------------------------------------
+; [A] zazraznenie cela fi30 -> [B] sustruzenie casek -> zazraznenie schodu
+G1 X30 Z0          ; zazraznenie hrany [A] : pohyb X+2 a Z-1 sucasne = 1x45°
+G1 Z-29            ; sustruzenie po casek fi30, 1mm pred schodom
+G1 X45 Z-31        ; zazraznenie hrany [B] : prechod schodu fi30->fi45
 
-G0 X55 Z5      ; rychloposuv: bezpecna poloha
+; [C] sustruzenie casek fi45 a zazraznenie konca
+G1 Z-79            ; sustruzenie casek fi45, 1mm pred koncom
+G1 X50 Z-81        ; zazraznenie hrany [C] : koniec casek fi45
 
-G0 X28 Z1      ; rychloposuv: priblizenie - X musi byt MENSI ako fi30
-               ;   a Z musi byt pred celom (Z+1)
+G0 X55  Z100       ; odsun a navrat do bezpecnej polohy
 
-G1 X30 Z0      ; PRACOVNY POSUV: pohyb X+2 a Z-1 sucasne
-               ;   -> zazrazenie 1x45° na hrane cela
-
-; ----------------------------------------------------------------
-; HRANA [B] - Zazraznenie schodu fi30->fi45 (pri Z=-30)
-; ----------------------------------------------------------------
-
-G1 Z-29        ; PRACOVNY POSUV: sustruzenie po casek fi30
-               ;   zastavime 1mm pred schodom (Z=-29, nie Z=-30)
-
-G1 X45 Z-31    ; PRACOVNY POSUV: zazraznenie prechodu
-               ;   pohyb X+15 a Z-2 = sikme zazraznenie schodu
-
-; ----------------------------------------------------------------
-; HRANA [C] - Zazraznenie konca casek fi45 (pri Z=-80)
-; ----------------------------------------------------------------
-
-G1 Z-79        ; PRACOVNY POSUV: sustruzenie casek fi45
-               ;   zastavime 1mm pred koncom (Z=-79)
-
-G1 X50 Z-81    ; PRACOVNY POSUV: zazraznenie poslednej hrany
-               ;   X+5 a Z-2 = zazraznenie 1x45°
-
-G0 X55         ; rychloposuv: odsun od kusu
-G0 Z100        ; rychloposuv: navrat do bezpecnej polohy
-
-M17            ; KONIEC PODPROGRAMU
+M17                ; koniec podprogramu - navrat do HRIADEL.MPF
