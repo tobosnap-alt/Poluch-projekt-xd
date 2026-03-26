@@ -1,0 +1,24 @@
+; ================================================================
+; PODPROGRAM L2 : DOCISTOVANIE
+; Nastroj       : T2 VBMT 110304
+; Uloha         : Presne dosustruzenie na finalny rozmer fi30 a fi45
+;                 Odobera sa zostatok 0.5 mm z hrubovacieho prechodu
+; ================================================================
+
+; --- Docistenie casek fi45 (od cela po Z=-80) ---
+G0 X55 Z5          ; odsun do bezpecnej polohy
+G0 X45 Z2          ; rychloposuv na presny priemer fi45
+G1 Z-80            ; docistovanie casek fi45 po celej dlzke
+G0 X55             ; odsun v osi X
+
+; --- Docistenie casek fi30 (od cela po Z=-30) ---
+G0 X30 Z2          ; rychloposuv na presny priemer fi30
+G1 Z-30            ; docistovanie casek fi30
+G0 X55             ; odsun v osi X
+
+; --- Docistenie schodu fi30 -> fi45 na Z=-30 ---
+G0 X28 Z-28        ; rychloposuv pred schod (X mensi ako fi30, 2mm pred schodom)
+G1 X45 Z-30        ; rezanie schodu - sucasny pohyb X aj Z = rovny schod
+G0 X55  Z100       ; odsun a navrat do bezpecnej polohy
+
+M17                ; koniec podprogramu - navrat do HRIADEL.MPF

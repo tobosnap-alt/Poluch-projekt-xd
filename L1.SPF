@@ -1,0 +1,26 @@
+; ================================================================
+; PODPROGRAM L1 : HRUBOVANIE
+; Nastroj       : T1 CNMG 120408
+; Uloha         : Odobranie suroviny, prisdavok 0.5 mm zostava
+;
+; G0 = rychloposuv (bez rezu)     X = priemer [mm]
+; G1 = pracovny posuv (rezanie)   Z = poloha po osi (Z0 = celo)
+; ================================================================
+
+; --- Prechod 1 : sustruzenie na fi46 po celej dlzke 80mm ---
+G0 X55 Z5          ; odsun do bezpecnej polohy
+G0 X46 Z2          ; rychloposuv na priemer fi46, pred celo
+G1 Z-80            ; reznie od Z=2 po Z=-80 (casek fi45 s prisdavkom)
+G0 X55             ; odsun v osi X
+
+; --- Prechod 2 : sustruzenie na fi34 (casek fi30, dlzka 30mm) ---
+G0 X34 Z2          ; rychloposuv na priemer fi34, pred celo
+G1 Z-30            ; reznie od Z=2 po Z=-30 (casek fi30 s prisdavkom)
+G0 X55             ; odsun v osi X
+
+; --- Prechod 3 : dohrubie na fi31 (blizsie k finalnym rozmerom) ---
+G0 X31 Z2          ; rychloposuv na priemer fi31
+G1 Z-30            ; reznie po Z=-30
+G0 X55  Z100       ; odsun a navrat do bezpecnej polohy
+
+M17                ; koniec podprogramu - navrat do HRIADEL.MPF
